@@ -1,0 +1,56 @@
+package views
+
+import "github.com/eriklupander/templ-demo/internal/app"
+
+templ AnswerQuestion(email string, question app.Question) {
+<html>
+    <head>
+       <title>Google SignIn</title>
+       <meta charset="utf-8"/>
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/> <!-- load bulma css -->
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/> <!-- load fontawesome -->
+       <style>
+           body        { padding-top:70px; }
+       </style>
+       <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+   </head>
+   <body>
+
+        <div class="container">
+           <strong>Email</strong>: {email}
+
+            <div class="jumbotron">
+                <h2 class="text-success  text-center"><span class="fa fa-user"></span> Besvara fråga</h2>
+                <h5 class="card-title">{question.Talk.Title}</h5>
+
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-1">Från</div>
+                        <div class="col-11">{question.From}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1">Inkom</div>
+                        <div class="col-11">{question.CreatedAt.Format( "2006-01-02 15:04:05")}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><hr/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9"><pre>{question.Text}</pre>
+                        </div>
+                   </div>
+                </div>
+                <form>
+                     <div class="form-group">
+                        <label for="answerTextarea1">Ditt svar</label>
+                        <textarea class="form-control" id="answerTextarea1" rows="5" name="answertext"></textarea>
+                      </div>
+                    <button type="submit" class="btn btn-primary" hx-post={ "/answerquestion?id=" + question.ID } hx-target="body">Svara</button>
+                    <button type="submit" class="btn btn-danger" hx-get="/" hx-target="body">Avbryt</button>
+                </form>
+            </div>
+        </div>
+
+    </body>
+</html>
+}

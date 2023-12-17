@@ -1,0 +1,40 @@
+package views
+
+import "github.com/eriklupander/templ-demo/internal/app"
+
+templ Index(email string, questions []app.Question) {
+<html>
+    <head>
+       <title>Google SignIn</title>
+       <meta charset="utf-8"/>
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/> <!-- load bulma css -->
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/> <!-- load fontawesome -->
+       <style>
+           body        { padding-top:70px; }
+       </style>
+       <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+   </head>
+   <body>
+   if email == "" {
+        @Login()
+   } else {
+
+        <div class="container">
+           <strong>Email</strong>: {email} <a href="/logout" hx-get="/logout" hx-target="html">Logga ut</a>
+
+            <div class="jumbotron">
+                <h2 class="text-success  text-center"><span class="fa fa-user"></span> Aktuella frågor</h2>
+                <button class="btn btn-info" hx-get="/all"
+                                                   hx-trigger="click"
+                                                   hx-target="#questions">Alla frågor <span hx-get="/countall" hx-trigger="every 5s" hx-target="this"></span></button>
+                <button class="btn btn-secondary" hx-get="/mine"
+                                                      hx-trigger="click"
+                                                      hx-target="#questions">Mina frågor <span hx-get="/countmine" hx-trigger="every 5s" hx-target="this"></span></button>
+                @Questions(questions)
+                <a href="/">Back to start page</a>
+            </div>
+        </div>
+   }
+    </body>
+</html>
+}
