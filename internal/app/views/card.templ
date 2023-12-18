@@ -3,20 +3,29 @@ package views
 import "github.com/eriklupander/templ-demo/internal/app"
 import "strings"
 
+import   "golang.org/x/text/cases"
+import   "golang.org/x/text/language"
+
+
 templ Card(question app.Question) {
     <div class="card">
+         <div class="card-header">{ question.Talk.Title }</div>
         <div class="card-body">
-          <h5 class="card-title">{question.Talk.Title}</h5>
-           <h6 class="card-subtitle">{ strings.Join(question.Talk.Authors, ",") }</h6>
+
+         
            if question.Status == app.StatusOpen {
                 <div class="container">
                  <div class="row">
-                    <div class="col-1">Från</div>
-                    <div class="col-11">{question.From}</div>
+                    <div class="col-2">Föredragshållare</div>
+                    <div class="col-10">{ cap(strings.Split(strings.Join(question.Talk.Authors, ","), "@")[0]) }</div>
+                </div>
+                 <div class="row">
+                    <div class="col-2">Från</div>
+                    <div class="col-10">{question.From}</div>
                 </div>
                 <div class="row">
-                    <div class="col-1">Inkom</div>
-                    <div class="col-11">{question.CreatedAt.Format( "2006-01-02 15:04:05")}</div>
+                    <div class="col-2">Inkom</div>
+                    <div class="col-10">{question.CreatedAt.Format( "2006-01-02 15:04:05")}</div>
                 </div>
                 <div class="row">
                     <div class="col-12"><hr/></div>
@@ -48,4 +57,11 @@ templ Card(question app.Question) {
 
         </div>
       </div>
+}
+
+
+func cap(in string) string {
+	in = strings.Split(in, "@")[0]
+	in = strings.ReplaceAll(in, ".", " ")
+	return cases.Title(language.Und).String(in)
 }

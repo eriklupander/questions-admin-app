@@ -24,12 +24,16 @@ templ Index(email string, questions []app.Question) {
 
             <div class="jumbotron">
                 <h2 class="text-success  text-center"><span class="fa fa-user"></span> Aktuella frågor</h2>
-                <button class="btn btn-info" hx-get="/all"
-                                                   hx-trigger="click"
-                                                   hx-target="#questions">Alla frågor <span hx-get="/countall" hx-trigger="every 5s" hx-target="this"></span></button>
-                <button class="btn btn-secondary" hx-get="/mine"
-                                                      hx-trigger="click"
-                                                      hx-target="#questions">Mina frågor <span hx-get="/countmine" hx-trigger="every 5s" hx-target="this"></span></button>
+                <button class="btn btn-info"
+                        hx-get="/all"
+                        hx-trigger="click"
+                        hx-target="#questions">Alla frågor <span hx-get="/countall" hx-trigger="every 5s" hx-target="this"><span hx-get="/countall" hx-trigger="load" hx-target="this"/></span>
+                </button>
+                <button class="btn btn-secondary"
+                        hx-get="/mine"
+                        hx-trigger="click"
+                        hx-target="#questions">Mina frågor <span hx-get="/countmine" hx-trigger="every 5s" hx-target="this"><span hx-get="/countmine" hx-trigger="load" hx-target="this"/></span>
+                </button>
                 @Questions(questions)
                 <a href="/">Back to start page</a>
             </div>

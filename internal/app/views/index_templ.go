@@ -132,7 +132,7 @@ func Index(email string, questions []app.Question) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span hx-get=\"/countall\" hx-trigger=\"every 5s\" hx-target=\"this\"></span></button> <button class=\"btn btn-secondary\" hx-get=\"/mine\" hx-trigger=\"click\" hx-target=\"#questions\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span hx-get=\"/countall\" hx-trigger=\"every 5s\" hx-target=\"this\"><span hx-get=\"/countall\" hx-trigger=\"load\" hx-target=\"this\"></span></span></button> <button class=\"btn btn-secondary\" hx-get=\"/mine\" hx-trigger=\"click\" hx-target=\"#questions\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -141,7 +141,7 @@ func Index(email string, questions []app.Question) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span hx-get=\"/countmine\" hx-trigger=\"every 5s\" hx-target=\"this\"></span></button>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span hx-get=\"/countmine\" hx-trigger=\"every 5s\" hx-target=\"this\"><span hx-get=\"/countmine\" hx-trigger=\"load\" hx-target=\"this\"></span></span></button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

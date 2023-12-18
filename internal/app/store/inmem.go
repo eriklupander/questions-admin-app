@@ -27,7 +27,7 @@ func (i *InMem) Create(q app.Question) {
 func (i *InMem) All() []app.Question {
 	out := i.db
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.Before(out[j].CreatedAt)
+		return out[i].CreatedAt.After(out[j].CreatedAt) && out[i].Status == app.StatusOpen
 	})
 	return out
 }
@@ -39,7 +39,7 @@ func (i *InMem) AllForTalk(talkID string) []app.Question {
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.Before(out[j].CreatedAt)
+		return out[i].CreatedAt.After(out[j].CreatedAt)
 	})
 	return out
 }
@@ -51,7 +51,7 @@ func (i *InMem) AllForTalkInStatus(talkID string, status app.Status) []app.Quest
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.Before(out[j].CreatedAt)
+		return out[i].CreatedAt.After(out[j].CreatedAt)
 	})
 	return out
 }
@@ -64,7 +64,7 @@ func (i *InMem) AllInStatus(status app.Status) []app.Question {
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.Before(out[j].CreatedAt)
+		return (out[j].Status == app.StatusOpen && out[i].Status != app.StatusOpen) && out[i].CreatedAt.After(out[j].CreatedAt)
 	})
 	return out
 }
@@ -77,7 +77,20 @@ func (i *InMem) AllForAuthor(email string) []app.Question {
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.Before(out[j].CreatedAt)
+		return out[i].CreatedAt.After(out[j].CreatedAt)
+	})
+	return out
+}
+
+func (i *InMem) AllForAuthorInStatus(email string, status app.Status) []app.Question {
+	out := make([]app.Question, 0)
+	for _, q := range i.db {
+		if slices.Contains(q.Talk.Authors, email) && q.Status == status {
+			out = append(out, q)
+		}
+	}
+	sort.Slice(out, func(i, j int) bool {
+		return out[i].CreatedAt.After(out[j].CreatedAt)
 	})
 	return out
 }
@@ -113,12 +126,13 @@ func (i *InMem) FakeData() {
 
 	for j := 0; j < 15; j++ {
 		rnd := rand.Intn(len(talks))
+		negRand := -rand.Intn(120)
 		q := app.Question{
 			ID:        uuid.NewString(),
 			Talk:      talks[rnd],
 			From:      gofakeit.Name(),
 			Text:      gofakeit.Question(),
-			CreatedAt: time.Now(),
+			CreatedAt: time.Now().Add(time.Minute * time.Duration(negRand)),
 			Status:    app.StatusOpen,
 		}
 		i.db = append(i.db, q)

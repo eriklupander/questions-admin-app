@@ -10,6 +10,7 @@ require (
 	github.com/google/uuid v1.5.0
 	github.com/gorilla/sessions v1.1.1
 	github.com/markbates/goth v1.78.0
+	golang.org/x/text v0.13.0
 )
 
 require (

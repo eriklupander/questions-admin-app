@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/a-h/templ"
+	"github.com/eriklupander/templ-demo/internal/app"
 	"github.com/eriklupander/templ-demo/internal/app/store"
 	"github.com/eriklupander/templ-demo/internal/app/views"
 	"github.com/go-chi/chi/v5"
@@ -95,12 +96,12 @@ func main() {
 
 	r.Get("/login", templ.Handler(views.Login()).ServeHTTP)
 	r.Get("/countall", func(w http.ResponseWriter, r *http.Request) {
-		all := len(db.All())
+		all := len(db.AllInStatus(app.StatusOpen))
 		_, _ = w.Write([]byte(" (" + strconv.Itoa(all) + ")"))
 	})
 	r.Get("/countmine", func(w http.ResponseWriter, r *http.Request) {
 		email := session.GetString(r, "email")
-		all := len(db.AllForAuthor(email))
+		all := len(db.AllForAuthorInStatus(email, app.StatusOpen))
 		_, _ = w.Write([]byte(" (" + strconv.Itoa(all) + ")"))
 	})
 	r.Get("/all", func(w http.ResponseWriter, r *http.Request) {
