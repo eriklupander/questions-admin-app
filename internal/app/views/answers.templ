@@ -1,0 +1,30 @@
+package views
+
+import "github.com/eriklupander/templ-demo/internal/app"
+
+templ Answers(answers []app.Answer) {
+        if len(answers) > 0 {
+        
+           for _, answer := range answers {
+                <div class="card" style="margin-top:4px;">
+                     <div class="card-body bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-2">Besvarad av</div>
+                                <div class="col-10">{answer.AnsweredBy}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Datum</div>
+                                <div class="col-10">{answer.AnsweredAt.Format( "2006-01-02 15:04:05")}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">Svar</div>
+                                <div class="col-10">{answer.Text}</div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                }
+
+    }
+}

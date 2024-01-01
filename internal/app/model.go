@@ -17,7 +17,7 @@ type Question struct {
 	Text      string
 	CreatedAt time.Time
 	Status    Status
-	Answer    *Answer
+	Answers   []Answer
 }
 
 type Answer struct {

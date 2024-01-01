@@ -2,14 +2,15 @@ package store
 
 import (
 	"fmt"
-	"github.com/brianvoe/gofakeit"
-	"github.com/eriklupander/templ-demo/internal/app"
-	"github.com/google/uuid"
 	"log/slog"
 	"math/rand"
 	"slices"
 	"sort"
 	"time"
+
+	"github.com/brianvoe/gofakeit"
+	"github.com/eriklupander/templ-demo/internal/app"
+	"github.com/google/uuid"
 )
 
 type InMem struct {
@@ -27,7 +28,8 @@ func (i *InMem) Create(q app.Question) {
 func (i *InMem) All() []app.Question {
 	out := i.db
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].CreatedAt.After(out[j].CreatedAt) && out[i].Status == app.StatusOpen
+		return out[i].CreatedAt.After(out[j].CreatedAt)
+		//return out[i].CreatedAt.After(out[j].CreatedAt) && out[i].Status == app.StatusOpen
 	})
 	return out
 }
@@ -64,7 +66,8 @@ func (i *InMem) AllInStatus(status app.Status) []app.Question {
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
-		return (out[j].Status == app.StatusOpen && out[i].Status != app.StatusOpen) && out[i].CreatedAt.After(out[j].CreatedAt)
+		//return (out[j].Status == app.StatusOpen && out[i].Status != app.StatusOpen) && out[i].CreatedAt.After(out[j].CreatedAt)
+		return out[i].CreatedAt.After(out[j].CreatedAt)
 	})
 	return out
 }
@@ -105,11 +108,11 @@ func (i *InMem) Delete(id string) {
 	}
 }
 
-func (i *InMem) FakeData() {
+func (i *InMem) SeedWithFakeData() {
 	talk1 := app.Talk{
 		ID:      "1",
 		Title:   "Spring Boot 3.2",
-		Authors: []string{"magnus.larsson@callistaenterprise.se"},
+		Authors: []string{"hanna.hansson@callistaenterprise.se"},
 	}
 	talk2 := app.Talk{
 		ID:      "2",
@@ -119,7 +122,7 @@ func (i *InMem) FakeData() {
 	talk3 := app.Talk{
 		ID:      "3",
 		Title:   "AI - Skynet is here",
-		Authors: []string{"bjorn.genfors@callistaenterprise.se"},
+		Authors: []string{"kalle.karlsson@callistaenterprise.se"},
 	}
 	talks := []app.Talk{talk1, talk2, talk3}
 	gofakeit.Seed(time.Now().UnixMilli())
@@ -169,7 +172,7 @@ func (i *InMem) SaveAnswer(id string, text string, answeredBy string) error {
 	if err != nil {
 		return err
 	}
-	q.Answer = &app.Answer{AnsweredBy: answeredBy, Text: text, AnsweredAt: time.Now()}
+	q.Answers = append(q.Answers, app.Answer{ID: uuid.NewString(), AnsweredBy: answeredBy, Text: text, AnsweredAt: time.Now()})
 	q.Status = app.StatusAnswered
 
 	// Delete the old one and add the new

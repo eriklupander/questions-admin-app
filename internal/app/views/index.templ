@@ -20,7 +20,7 @@ templ Index(email string, questions []app.Question) {
    } else {
 
         <div class="container">
-           <strong>Email</strong>: {email} <a href="/logout" hx-get="/logout" hx-target="html">Logga ut</a>
+           <strong>Inloggad som</strong>: {email} <a href="/logout" hx-get="/logout" hx-target="html">Logga ut</a>
 
             <div class="jumbotron">
                 <h2 class="text-success  text-center"><span class="fa fa-user"></span> Aktuella frågor</h2>

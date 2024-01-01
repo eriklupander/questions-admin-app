@@ -1,0 +1,27 @@
+package views
+
+import "time"
+
+templ Hello(name string) {
+	<div>{ name }</div>
+}
+
+templ Index2() {
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Templ test, the date is {time.Now().Format("2006-01-02")}</title>
+    </head>
+    <body>
+        @Hello("World")
+        @BulletList("Actors", []string{"Tom", "Kate", "Lance"})
+    </body>
+</html>
+}
+
+templ BulletList(name string, values []string) {
+	<h4>Name of list: {name}</h4>
+	for _, val := range values {
+        <li>{ val }</li>
+    }
+}

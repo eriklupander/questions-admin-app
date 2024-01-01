@@ -9,12 +9,13 @@ import   "golang.org/x/text/language"
 
 templ Card(question app.Question) {
     <div class="card">
-         <div class="card-header">{ question.Talk.Title }</div>
+         <div class="card-header">{ question.Talk.Title }
+          if question.Status == app.StatusAnswered {
+            - <span class="text-success">Besvarad</span>
+          }
+         </div>
         <div class="card-body">
-
-         
-           if question.Status == app.StatusOpen {
-                <div class="container">
+             <div class="container">
                  <div class="row">
                     <div class="col-2">Föredragshållare</div>
                     <div class="col-10">{ cap(strings.Split(strings.Join(question.Talk.Authors, ","), "@")[0]) }</div>
@@ -45,15 +46,12 @@ templ Card(question app.Question) {
                             hx-confirm="Är du säker på att du vill radera frågan?"
                             hx-target="#questions">Radera</button>
                     </div>
-                </div>
+
+
+                  </div>
+                 @Answers(question.Answers)
               </div>
-           } else if question.Status == app.StatusAnswered {
-            <div class="container">
-             <div class="row">
-                <div class="col-12 text-success">Besvarad</div>
-            </div>
-            </div>
-           }
+             
 
         </div>
       </div>
