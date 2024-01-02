@@ -6,6 +6,11 @@ import "strings"
 import   "golang.org/x/text/cases"
 import   "golang.org/x/text/language"
 
+func cap(in string) string {
+	in = strings.Split(in, "@")[0]
+	in = strings.ReplaceAll(in, ".", " ")
+	return cases.Title(language.Und).String(in)
+}
 
 templ Card(question app.Question) {
     <div class="card">
@@ -35,31 +40,22 @@ templ Card(question app.Question) {
                     <div class="col-9"><pre>{question.Text}</pre>
                     </div>
                     <div class="col-3 text-right">
-                        <button class="btn btn-success" value={ question.ID }
+                        <button class="btn btn-success"
                             hx-get={"/answer?id=" + question.ID }
                             hx-trigger="click"
                             hx-target="body"
                         >Besvara</button>
-                        <button type="submit" name="id" class="btn btn-danger" value={ question.ID }
+                        <button type="submit" name="id" class="btn btn-danger"
                             hx-delete={"/delete?id=" + question.ID }
                             hx-trigger="click"
                             hx-confirm="Är du säker på att du vill radera frågan?"
                             hx-target="#questions">Radera</button>
                     </div>
-
-
-                  </div>
+                 </div>
                  @Answers(question.Answers)
               </div>
-             
-
         </div>
       </div>
 }
 
 
-func cap(in string) string {
-	in = strings.Split(in, "@")[0]
-	in = strings.ReplaceAll(in, ".", " ")
-	return cases.Title(language.Und).String(in)
-}

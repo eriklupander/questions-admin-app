@@ -11,7 +11,7 @@ templ Answers(answers []app.Answer) {
                         <div class="container">
                             <div class="row">
                                 <div class="col-2">Besvarad av</div>
-                                <div class="col-10">{answer.AnsweredBy}</div>
+                                <div class="col-10">{ cap(answer.AnsweredBy) }</div>
                             </div>
                             <div class="row">
                                 <div class="col-2">Datum</div>
@@ -22,9 +22,8 @@ templ Answers(answers []app.Answer) {
                                 <div class="col-10">{answer.Text}</div>
                             </div>
                         </div>
-                      </div>
-                    </div>
-                }
-
+                     </div>
+                </div>
+          }
     }
 }

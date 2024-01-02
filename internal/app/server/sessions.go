@@ -17,7 +17,7 @@ func SetupSessions() (*sessions.Session, error) {
 
 	// User session mgmt, used once gothic has performed the social login.
 	var session *sessions.Session
-	var secret = []byte("u46IpCV9y5Vlur8YvODJEhgOY8m9JVE4")
+	var secret = []byte("replace-me-with-something")
 	session = sessions.New(secret)
 	session.Lifetime = 3 * time.Hour
 
