@@ -3,23 +3,23 @@ package views
 import "github.com/eriklupander/templ-demo/internal/app"
 
 templ Index(email string, questions []app.Question) {
-<html>
-    <head>
-       <title>Google SignIn</title>
-       <meta charset="utf-8"/>
-       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/> <!-- load bulma css -->
-       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/> <!-- load fontawesome -->
-       <style>
+	<html>
+		<head>
+			<title>Google SignIn</title>
+			<meta charset="utf-8"/>
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/> <!-- load bulma css -->
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/> <!-- load fontawesome -->
+			<style>
            body        { padding-top:70px; }
        </style>
-       <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
-   </head>
-   <body>
-   if email == "" {
-        @Login()
-   } else {
-        @Dashboard(email, questions)
-   }
-    </body>
-</html>
+			<script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+		</head>
+		<body>
+			if email == "" {
+				@Login()
+			} else {
+				@Dashboard(email, questions)
+			}
+		</body>
+	</html>
 }
