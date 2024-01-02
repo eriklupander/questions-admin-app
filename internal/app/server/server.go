@@ -151,6 +151,6 @@ func indexPage(session *sessions.Session, db *store.InMem) func(w http.ResponseW
 			}
 			return
 		}
-		templ.Handler(views.Index(email, db.All())).ServeHTTP(w, r)
+		templ.Handler(views.Index("", nil)).ServeHTTP(w, r)
 	}
 }

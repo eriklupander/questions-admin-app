@@ -50,7 +50,7 @@ func logoutHandler(session *sessions.Session) func(w http.ResponseWriter, r *htt
 	return func(w http.ResponseWriter, r *http.Request) {
 		session.Destroy(r)
 		gothic.Logout(w, r)
-		http.Redirect(w, r, "/", 302)
+		w.Header().Set("HX-Redirect", "/") // Use the special HTMX redirect header to trigger a full page reload.
 	}
 }
 
