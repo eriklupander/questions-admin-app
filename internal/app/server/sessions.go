@@ -31,7 +31,7 @@ func SetupSessions() (*sessions.Session, error) {
 
 	cookieStore.Options.Domain = "localhost"
 	cookieStore.Options.Path = ""
-	cookieStore.Options.HttpOnly = false // HttpOnly should always be enabled
+	cookieStore.Options.HttpOnly = true // HttpOnly should always be enabled
 	cookieStore.Options.Secure = isProd
 
 	gothic.Store = cookieStore
