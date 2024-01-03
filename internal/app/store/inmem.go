@@ -141,21 +141,6 @@ func (i *InMem) SeedWithFakeData() {
 		i.db = append(i.db, q)
 	}
 
-	//go func() {
-	//	for {
-	//		time.Sleep(time.Second * 15)
-	//		rnd := rand.Intn(len(talks))
-	//		q := app.Question{
-	//			ID:        uuid.NewString(),
-	//			Talk:      talks[rnd],
-	//			From:      gofakeit.Name(),
-	//			Text:      gofakeit.Question(),
-	//			CreatedAt: time.Now(),
-	//			Status:    app.StatusOpen,
-	//		}
-	//		i.db = append(i.db, q)
-	//	}
-	//}()
 }
 
 func (i *InMem) Get(id string) (app.Question, error) {
@@ -179,4 +164,23 @@ func (i *InMem) SaveAnswer(id string, text string, answeredBy string) error {
 	i.Delete(id)
 	i.Create(q)
 	return nil
+}
+
+func (i *InMem) Emit(qChan chan app.Question) {
+
+	go func() {
+		for {
+			time.Sleep(time.Second * 3)
+			q := app.Question{
+				ID:        uuid.NewString(),
+				Talk:      app.Talk{ID: uuid.NewString(), Title: gofakeit.HipsterSentence(3)},
+				From:      gofakeit.Name(),
+				Text:      gofakeit.Question(),
+				CreatedAt: time.Now(),
+				Status:    app.StatusOpen,
+			}
+			i.db = append(i.db, q)
+			qChan <- q
+		}
+	}()
 }

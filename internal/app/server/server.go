@@ -1,16 +1,20 @@
 package server
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/a-h/templ"
+	"github.com/eriklupander/templ-demo/internal/app"
 	"github.com/eriklupander/templ-demo/internal/app/store"
 	"github.com/eriklupander/templ-demo/internal/app/views"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/golangcollege/sessions"
+	"log/slog"
 	"net/http"
 )
 
-func StartServer(session *sessions.Session, db *store.InMem) {
+func StartServer(session *sessions.Session, db *store.InMem, qChan chan app.Question) {
 	// Set-up chi router with middleware
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -35,6 +39,43 @@ func StartServer(session *sessions.Session, db *store.InMem) {
 
 	r.Post("/answerquestion", answerQuestionHandler(session, db))
 	r.Delete("/delete", deleteQuestionHandler(session, db))
+
+	// SSE experiment
+	r.Get("/stream", templ.Handler(views.Stream()).ServeHTTP)
+	r.Get("/sse", func(w http.ResponseWriter, r *http.Request) {
+		flusher, ok := w.(http.Flusher)
+		if !ok {
+			http.Error(w, "SSE is not supported", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set("Connection", "keep-alive")
+
+	OUTER:
+		for {
+			select {
+			case q := <-qChan:
+				buf := new(bytes.Buffer)
+
+				buf.WriteString(fmt.Sprintf("event: %s\n", "question"))
+				buf.WriteString("data: ")
+				views.Card(q).Render(r.Context(), buf)
+				buf.WriteString("\n\n")
+
+				_, err := w.Write(buf.Bytes())
+				if err != nil {
+					slog.Error("SSE write failed", slog.Any("error", err))
+				}
+				flusher.Flush()
+			case <-r.Context().Done():
+				break OUTER
+			}
+
+		}
+		slog.Info("SSE disconnect")
+	})
 
 	// Start plain HTTP listener
 	_ = http.ListenAndServe(":3000", r)

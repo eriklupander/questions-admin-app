@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/eriklupander/templ-demo/internal/app"
 	"github.com/eriklupander/templ-demo/internal/app/server"
 	"github.com/eriklupander/templ-demo/internal/app/store"
 	"log/slog"
@@ -19,6 +20,9 @@ func main() {
 	db := store.NewInMem()
 	db.SeedWithFakeData()
 
+	qChan := make(chan app.Question, 0)
+	db.Emit(qChan)
+
 	// Setup and start HTTP server
-	server.StartServer(session, db)
+	server.StartServer(session, db, qChan)
 }
